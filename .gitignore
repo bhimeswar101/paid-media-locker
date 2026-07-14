@@ -1,0 +1,28 @@
+# Dependencies
+**/node_modules
+
+# Environment variables
+**/.env
+**/.env.*
+
+# Build output
+dist/
+build/
+
+# Logs
+*.log
+logs/
+
+# Coverage
+coverage/
+
+# VS Code workspace settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Expo
+mobile/.expo
+mobile/.expo-shared
