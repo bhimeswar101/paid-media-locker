@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String @id @default(cuid())
+
+  name         String
+  email        String @unique
+  password     String
+
+  coins        Int @default(100)
+
+  medias       Media[]
+  purchases    Purchase[]
+  transactions Transaction[]
+
+  createdAt    DateTime @default(now())
+}
+
+model Media {
+  id          String @id @default(cuid())
+
+  title       String
+
+  image       String
+  preview     String
+
+  price       Int
+
+  ownerId     String
+  owner       User @relation(fields: [ownerId], references: [id])
+
+  purchases   Purchase[]
+
+  createdAt   DateTime @default(now())
+}
+
+model Purchase {
+  id          String @id @default(cuid())
+
+  userId      String
+  mediaId      String
+
+  user        User @relation(fields: [userId], references: [id])
+  media       Media @relation(fields: [mediaId], references: [id])
+
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, mediaId])
+}
+
+model Transaction {
+  id          String @id @default(cuid())
+
+  userId      String
+
+  amount      Int
+
+  type        String
+
+  description String
+
+  user        User @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime @default(now())
+}
