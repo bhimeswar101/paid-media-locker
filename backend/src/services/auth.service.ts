@@ -4,7 +4,11 @@ import {
   findUserById,
 } from "../repositories/user.repository";
 
-import { hashPassword, comparePassword } from "../utils/hash";
+import {
+  hashPassword,
+  comparePassword,
+} from "../utils/hash";
+
 import { signToken } from "../utils/jwt";
 
 export const registerUser = async (
@@ -61,7 +65,9 @@ export const loginUser = async (
   };
 };
 
-export const getCurrentUser = async (userId: string) => {
+export const getCurrentUser = async (
+  userId: string
+) => {
   const user = await findUserById(userId);
 
   if (!user) {
