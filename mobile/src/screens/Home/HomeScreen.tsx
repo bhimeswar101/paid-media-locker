@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 
 import {
   View,
   FlatList,
   StyleSheet,
   Alert,
+  RefreshControl,
 } from "react-native";
 
 import {
@@ -33,11 +38,16 @@ export default function HomeScreen({
   const [media, setMedia] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const [purchasedIds, setPurchasedIds] = useState<string[]>([]);
 
   useEffect(() => {
+  const unsubscribe = navigation.addListener("focus", () => {
     loadData();
-  }, []);
+  });
+
+  return unsubscribe;
+}, [navigation]);
     async function loadData() {
   try {
     setLoading(true);
@@ -71,6 +81,15 @@ export default function HomeScreen({
     setLoading(false);
   }
 }
+const onRefresh = useCallback(async () => {
+  setRefreshing(true);
+
+  try {
+    await loadData();
+  } finally {
+    setRefreshing(false);
+  }
+}, []);
   async function handlePurchase(mediaId: string) {
     try {
       const response = await purchaseMedia(mediaId);
@@ -157,22 +176,30 @@ export default function HomeScreen({
   contentContainerStyle={{
     paddingBottom: 30,
   }}
+  refreshControl={
+    <RefreshControl
+      refreshing={refreshing}
+      onRefresh={onRefresh}
+      tintColor="#ffffff"
+      colors={["#3B82F6"]}
+    />
+  }
   renderItem={({ item }) => {
     const purchased = purchasedIds.includes(item.id);
 
     return (
-     <MediaCard
-  item={item}
-  purchased={purchased}
-  onBuy={() => handlePurchase(item.id)}
-  onDownload={() => handleDownload(item.id)}
-  onPress={() =>
-    navigation.navigate("MediaDetails", {
-      item,
-      purchased,
-    })
-  }
-/>
+      <MediaCard
+        item={item}
+        purchased={purchased}
+        onBuy={() => handlePurchase(item.id)}
+        onDownload={() => handleDownload(item.id)}
+        onPress={() =>
+          navigation.navigate("MediaDetails", {
+            item,
+            purchased,
+          })
+        }
+      />
     );
   }}
 />
