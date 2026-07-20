@@ -1,4 +1,5 @@
 import { Router } from "express";
+console.log("✅ auth.routes.ts loaded");
 import {
   register,
   login,

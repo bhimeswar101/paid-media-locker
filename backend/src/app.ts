@@ -6,7 +6,7 @@ import authRoutes from "./routes/auth.routes";
 import mediaRoutes from "./routes/media.routes";
 import purchaseRoutes from "./routes/purchase.routes";
 import walletRoutes from "./routes/wallet.routes";
-import downloadRoutes from "./routes/download.routes"; 
+import downloadRoutes from "./routes/download.routes";
 
 const app = express();
 
@@ -21,7 +21,14 @@ app.get("/", (_, res) => {
   });
 });
 
+// TEMP DEBUG
+app.use("/api/auth", (req, res, next) => {
+  console.log("AUTH ROUTE HIT:", req.method, req.url);
+  next();
+});
+
 // Routes
+console.log("Mounting auth routes...");
 app.use("/api/auth", authRoutes);
 app.use("/api/media", mediaRoutes);
 app.use("/api/purchase", purchaseRoutes);
