@@ -2,7 +2,7 @@ import axios from "axios";
 import { getToken } from "../storage/authStorage";
 
 const api = axios.create({
-  baseURL: "https://paid-media-locker-rl7v.onrender.com/api",
+  baseURL: "https://paid-media-locker-vy2t.onrender.com/api",
 });
 
 api.interceptors.request.use(async (config) => {
